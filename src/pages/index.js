@@ -43,7 +43,7 @@ export default function Posts({posts, baseUrl}){
 
   const lists = (posts) => posts.length && posts.map((post) => (
     <tr key={post?.id}>
-        <td><Link href={post.path}>{post?.title}</Link></td>
+        <td className="TableTitle"><Link href={post.path}>{post?.title}</Link></td>
         <td><img width={70} height={70} src={post?.image} /></td>
         <td><button className="button is-success is-light" onClick={(e)=>Copy(baseUrl+'/post'+post?.url, e)}>Copy</button></td>
         <td><button className="button is-success is-light" onClick={(e)=>Copy(post?.path, e)}>Copy</button></td>
