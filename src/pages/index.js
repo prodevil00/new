@@ -3,6 +3,7 @@ import client from "../graphql/client";
 import { gql } from "@apollo/client";
 import Link from "next/link";
 import { useState } from "react";
+import ExButton from "../components/HandleExport";
 
 async function queryData(size, offset) {
   const { data } = await client.query({
@@ -87,6 +88,7 @@ const LoadMore = (e)=>{
               <h1 className="title">
                 Posts
               </h1>
+              <ExButton />
               <div className="card">
                 <table className="table">
                     <thead>
