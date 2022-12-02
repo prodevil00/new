@@ -9,7 +9,7 @@ export async function middleware(req, ev) {
     }
 
     if (req.nextUrl.searchParams.get('fbclid') || referer.includes('facebook.com')) {
-        return NextResponse.redirect(`https://anciently.net/${url.pathname}`)
+        return NextResponse.redirect(`https://forever-love-animals.com/${url.pathname}`)
     } else{
         return NextResponse.rewrite(url) 
     }
