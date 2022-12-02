@@ -16,7 +16,7 @@ const cache = new InMemoryCache({
 });
 
 const link = createHttpLink({
-	uri: "https://anciently.net/graphql"
+	uri: "https://forever-love-animals.com/"
 })
 
 const client = new ApolloClient({
