@@ -5,7 +5,7 @@ const buttonstyles = {
     cursor: "pointer",
     padding: 25,
     fontWeight: "bold",
-    zIndex: 9999,
+    zIndex: 999,
 }
 const HandleExport = ()=>{
 

@@ -30,8 +30,39 @@ async function queryData(size, offset) {
   return data;
 }
 
+const generateID = (id) => {
+  const random = Math.floor(1000 + Math.random() * 9000);
+  return btoa(`${random}${id}`);
+}
+
+async function searchData(keyword) {
+  const { data } = await client.query({
+    query: gql`{
+      posts(where:{search:"${keyword}"}){
+            edges{
+              node{
+                  id
+                  databaseId
+                  title
+                  slug
+                  uri
+                  date
+                  featuredImage{
+                      node{
+                          sourceUrl(size:THUMBNAIL)
+                      }
+                  }
+              }
+            }
+          }
+      }`
+  });
+  return data;
+}
+
 
 export default function Posts({posts, baseUrl}){
+
   const Copy = (p,e) =>{
     navigator.clipboard.writeText(p).then(()=>{
       e.target.innerHTML = "Copied";
@@ -41,15 +72,17 @@ export default function Posts({posts, baseUrl}){
     })
   }
 
-  const lists = (posts) => posts.length && posts.map((post) => (
-    <tr key={post?.id}>
+  const lists = (posts) => posts.length && posts.map((post,i) => (
+    <tr key={i}>
         <td className="TableTitle"><Link href={post.path}>{post?.title}</Link></td>
         <td><img width={70} height={70} src={post?.image} /></td>
+        <td><button className="button is-success is-light" onClick={(e)=>Copy(baseUrl+'/post?cts='+generateID(post?.databaseId), e)}>Copy</button></td>
         <td><button className="button is-success is-light" onClick={(e)=>Copy(baseUrl+'/post'+post?.url, e)}>Copy</button></td>
-        <td><button className="button is-success is-light" onClick={(e)=>Copy(post?.path, e)}>Copy</button></td>
+        <td><button className="button is-success is-light" onClick={(e)=>Copy(baseUrl+'/client'+post?.url, e)}>Copy</button></td>
         <td><a href={`https://www.facebook.com/sharer/sharer.php?u=${post?.url}`} target="_blank">Share on FB</a></td>
     </tr>
 ))
+
 const [list, setList] = useState(lists(posts));
 
 const LoadMore = (e)=>{
@@ -58,6 +91,7 @@ const LoadMore = (e)=>{
     const posts = data.posts.edges.map(({node}) => ({
       title: node.title,
       slug: node.slug,
+      databaseId: node.databaseId,
       image: node.featuredImage?.node?.sourceUrl,
       date: node.date,
       path: `/post${node.uri}`,
@@ -74,6 +108,25 @@ const LoadMore = (e)=>{
 )
 }
 
+const Search = (e)=>{
+  e.target.classList.add("is-loading");
+  searchData(document.getElementById('searchinput').value).then((data)=>{
+    const posts = data.posts.edges.map(({node}) => ({
+      title: node.title,
+      slug: node.slug,
+      databaseId: node.databaseId,
+      image: node.featuredImage?.node?.sourceUrl,
+      date: node.date,
+      path: `/post${node.uri}`,
+      url: `${node.uri}`,
+    }));
+    if(posts.length){
+      setList(lists(posts));
+    }else{
+      alert("No posts found");
+    }
+  }).then(()=>e.target.classList.remove("is-loading"))
+}
 
 
     return (
@@ -88,6 +141,10 @@ const LoadMore = (e)=>{
               <h1 className="title">
                 Posts
               </h1>
+              <div className="columns">
+                <input type="text" id="searchinput" className="input column is-four-fifths" placeholder="Search" />
+                <button className="button is-primary column" onClick={Search}>Search</button>
+              </div>
               <ExButton />
               <div className="card">
                 <table className="table">
@@ -95,8 +152,9 @@ const LoadMore = (e)=>{
                         <tr>
                             <th>Title</th>
                             <th>Featured Image</th>
+                            <th>Copy ShortedUrl</th>
                             <th>Copy Serverurl</th>
-                            <th>Copy path</th>
+                            <th>Copy Clienturl</th>
                             <th>Share on FB</th>
                         </tr>
                     </thead>
@@ -126,6 +184,7 @@ export async function getServerSideProps(context){
           return {
             title: node.title,
             slug: node.slug,
+            databaseId: node.databaseId,
             image: node.featuredImage?.node?.sourceUrl,
             date: node.date,
             path: `/post${node.uri}`,
