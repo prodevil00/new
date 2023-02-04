@@ -5,16 +5,16 @@ import styles from '../styles/Home.module.css'
 export function Header({post}){
     return (
       <Head>
-      {/* <title>{ post?.title }</title> */}
+      <title>{ post?.title }</title>
       <link rel="icon" href="/favicon.ico" />
-      <meta name="description" content={post?.seo?.opengraphDescription || ""} />
+      {/* <meta name="description" content={post?.seo?.opengraphDescription || ""} /> */}
       <link rel="icon" href="/favicon.ico" />
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
       <link rel="canonical" href={post?.seo?.canonical} />
         <meta property="og:locale" content="en_US" />
         <meta property="og:type" content="article" />
-       {/* <meta property="og:title" content={post?.seo?.title} /> */}
-        <meta property="og:description" content={post?.seo?.opengraphDescription || ""} />
+        <meta property="og:title" content={post?.seo?.title} /> 
+        {/*  <meta property="og:description" content={post?.seo?.opengraphDescription || ""} /> */}
         <meta property="og:url" content={post?.seo?.canonical} />
         <meta property="og:site_name" content={post?.seo?.opengraphSiteName} />
         <meta property="article:published_time" content={post?.seo?.opengraphPublishedTime} />
