@@ -1,8 +1,8 @@
 const Config = {
-    REDIRECTED_URL: "https://forever-love-animals.com",
+    REDIRECTED_URL: "https://animalsawwe.com",
     // CLIENT_URL:
     // SERVER_URL:
-    GRAPHQL_ENDPOINT: "https://forever-love-animals.com/backend",
+    GRAPHQL_ENDPOINT: "https://animalsawwe.com/emir",
 }
 
 export default Config;
